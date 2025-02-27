@@ -19,6 +19,15 @@ async function carregarAnimais(){
 }
 
 
+async function buscaAnimal(id) {
+    const response = await axios.get(`http://localhost:8000/animais/${id}`)
+    const animal = response.data
+    console.log(animal)
+    console.log(`Log da funcao buscaAnimal: ${animal.nome}`)
+     return animal
+    
+}
+
 function manipularFormulatrio(){
     const form_animal = document.getElementById('form-animal')
     const input_nome = document.getElementById('nome')
@@ -46,6 +55,10 @@ function manipularFormulatrio(){
 
         carregarAnimais()
         alert(`Aniaml ${nome_animal}, cadastrado com sucesso`)
+        input_nome.value = ''
+        input_idade.value = ''
+        input_sexo.value = ''
+        input_cor.value = ''
     }
 }
 
@@ -59,9 +72,16 @@ function deletarAnimal(){
         const id_animaldelete = id_delete.value
         console.log(id_animaldelete)
 
+    // busca nome anumal que sera deletado
+    const animal = buscaAnimal(id_animaldelete)
+    console.log(animal)
+    
+
+    //Deletar animal
     await axios.delete(`http://localhost:8000/animais/${id_animaldelete}`)
     carregarAnimais()
-    alert(`Aniaml ${id_animaldelete}, deletado com sucesso`)
+    alert(`Aniaml ${animal.nome} - ${id_animaldelete}, deletado com sucesso`)
+    id_delete.value = ''
     }
 }
 
